@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: NestJS Lambda invoke example.
+
+Resources:
+  NestLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: dist/lambda.handler
+      Runtime: nodejs12.x
+      MemorySize: 256
+      Timeout: 60
+      Environment:
+        Variables:
+          NODE_ENV: development
+          SECRET_ID: secret_id_value
+          SECRET_KEY: secret_key_value
+
+          DATABASE_HOST: mysqldb # name ine docker network
+          DATABASE_PORT: 3306
+          DATABASE_USER: nest
+          DATABASE_PASSWORD: lambda
+          DATABASE_DATABASE: nest_lambda
+          DATABASE_LOGGING: true
+
+      Events:
+        GetResourceEventName:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
